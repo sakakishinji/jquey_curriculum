@@ -24,6 +24,23 @@
 </div>
 <script src="../../common/js/jquery.js"></script>
 <script>
+$(function() {
+  var $nav = $('.nav').find('li');//変数化
+  $nav.on('click', function() {   //クリックイベント
+    var index = $(this).index();
+    //クリックされたタブが何番目か調べindexという変数に代入
+    var $contents = $('.contents').find('li');
+    //変数化
+    $contents.css('display', 'none');
+    //コンテンツを一度非表示
+    $contents.eq(index).css('display', 'block');
+    //クリックしたタブと同じ順番のコンテンツを表示
+    $nav.addClass('is-hidden');
+    //タブのliにクラス「is-hidden」を追加
+    $nav.removeClass('is-hidden');
+    //追加したクラス「is-hidden」を削除
+  });
+});
 // 今回やるのはタブメニューです。
 // navの小要素であるliをクリックして、contents内の小要素であるli要素を表示させる。
 // .index() 要素のindexを取得します。
