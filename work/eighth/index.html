@@ -28,6 +28,42 @@
 </div>
 <script src="../../common/js/jquery.js"></script>
 <script>
+$(function() {
+  var $menuBtn = $('.menu__btn');  //変数化
+  var $title = $('.title');  //変数化
+  var $scrollTopBtn = $('.scrollTopBtn');  //変数化
+  var $body = $('body, html');  //変数化
+
+  $(window).scroll(function() {  //scrollイベント。$(window)はブラウザ上から確認できるもの。
+    if ($(this).scrollTop() > 100) { //画面のスクロール位置が100px超えた場合
+      $scrollTopBtn.fadeIn();  //scrollTopBtnをfadeInさせる
+    } else {
+      $scrollTopBtn.fadeOut();  //scrollTopBtnをfadeOutさせる
+    }
+  });
+
+  $scrollTopBtn.on('click', function() {  //scrollTopBtnのckickイベント
+    $body.animate({
+      scrollTop: 0  //一番上に戻る
+    });
+  });
+
+  $menuBtn.on('click', function() {  //menuBtnのclickイベント
+    var dataMenu = $(this).data('scroll-place-type');  //data取得
+    //console.log(dataMenu);
+
+    $title.each(function() {  //指定したDOM要素全てにそれぞれ処理をかける
+      var dataTitle = $(this).data('scroll-place-type');  //data取得
+      //console.log(dataTitle);
+
+      if (dataMenu === dataTitle) {  //dataMenuとdataTitleが厳密に等しい場合
+        $body.animate({
+          scrollTop: $(this).offset().top
+        });
+      }
+    });
+  });
+});
 // 今回やるのはページ内スクロールです。
 // 左上にあるメニューを押して、そのタイトルと同じ位置までスクロールするアニメーションです。
 // また100pxほどスクロールすると右下にボタンがフェードインします。
