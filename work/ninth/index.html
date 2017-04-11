@@ -5,38 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="format-detection" content="telephone=no">
 <title>jQuery</title>
-<link rel="stylesheet" href="../../common/css/reset.css">
-<link rel="stylesheet" href="../../common/css/base.css">
+<link rel="stylesheet" href="/common/css/reset.css">
+<link rel="stylesheet" href="/common/css/base.css">
 <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
 <div class="wrapper">
   <ul class="colorList"></ul>
 </div>
-<script src="../../common/js/jquery.js"></script>
+<script src="/common/js/jquery.js"></script>
 <script>
 $(function() {
-  var $colorList = $('.colorList');
+  var $colorList = $('.colorList');  //変数化
   $.ajax({
     url: './data.json'
   })
   .done(function(data) {
-    var colorArray = data.colorArray;
-    var colorArrayLength = colorArray.Length;
-    var data = //dataの変数のとこがわからない
-    var colorListTp = "";
-    //Tp=トランザクション処理のこと。たぶん。。。
-    //変数を宣言
-    for(var i = 0; i < colorArrayLength; 1++) {
-      var colorName = colorArray[i].colorName;
-      var haxValue = colorArray[i].haxValue;
-      colorListTp += '<li class="colorList__item">' + '<p class="colorList__title" style="background-color: ;">' + haxValue + colorName + '</p>' + '</li>';
+    var colorArray = data.colorsArray;  //変数化
+    //console.log(data)
+    var colorArrayLength = colorArray.length;  //変数化
+    var colorListTp = "";  //変数化
+    
+    for (var i = 0; i < colorArrayLength; i++) {　  //for文で繰り返し処理
+      var colorName = colorArray[i].colorName;  //変数化
+      var hexValue = colorArray[i].hexValue;  //変数化
+      //console.log(hexValue);
+      
+      colorListTp += '<li class="colorList__item">' + '<p class="colorList__title" style="background-color:' + hexValue +' ;">' + colorName + '</p>' + '</li>';  //colorListTp、加算代入。
     };
-    //繰り返し処理
-    //変数を宣言
-    //最後に複数の処理をまとめるみたいな感じのイメージ
-    $colorList.html(colorTp);
-    //console.log(data);
+    $colorList.append(colorListTp);  //要素の中に引数colorListTpを代入。html()でも確認済み。
   });
 });
 // 今回のカリキュラムではAjax（XMLHttpRequest）というJavaScriptの特殊な機能を使います。
