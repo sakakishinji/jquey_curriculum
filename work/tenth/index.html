@@ -21,29 +21,96 @@
       </div>
       <button id="js-search-button" class="search__btn">検索する</button>
     </div>
+    <p class="message"></p>
     <ul class="lists"></ul>
   </div>
 </div>
 <script src="../../common/js/jquery.js"></script>
 <script>
-// 楽天ブックスの総合検索APIを使って製作してください。
-// answerの挙動を良く見てね！
-//
-// https://webservice.rakuten.co.jp/api/booksbooksearch/
-//
-// $.ajax と $.each を調べてみてください
-// 以下は今回使う$.ajaxの基本的な形です。
-//
-// $.ajaxによってデータが取得できたら、必要なデータ(作品名とか作者名とか)を取得します。
-// 取得できたらDOM上に<ul class='lists'></ul>を用意しているので、その中に下のテンプレに沿ってデータを入れ込みましょう。
-// <li class='lists__item'>
-//  <div class='lists__item__inner'>
-//    <a href='' class='lists__item__link' target='_blank'>
-//      <img src='' class='lists__item__img' alt=''>
-//      <p class='lists__item__detail'>作品名：</p>
-//      <p class='lists__item__detail'>作者　：</p>
-//      <p class='lists__item__detail'>出版社：</p>
-//    </a>
+$(function() {
+  //var $searchText = $('.search__text');
+  var $searchTextInput = $('#js-search-word');
+  //var $lists = $('.lists);
+  var $searchBtn = $('.search__btn');
+
+  $searchBtn.on('click', function() {
+    var word = $searchTextInput.val();
+    //console.log(word)
+    
+    $('.lists').find('li').remove();
+    $.ajax({
+      url: 'https://app.rakuten.co.jp/services/api/BooksTotal/Search/20130522',
+      type: 'GET',
+      datatype: 'json',
+      data: {
+        applicationId: '1019399324990976605',
+        booksGenreId: '001',
+        keyword: word,
+        hits: '20',
+        page: '1'
+      }
+    })
+    .then(function(data) {
+      if (!data.hits) {
+        //console.log('検索結果がありません。');
+        $('.message').text('検索結果が見つかりません。');
+      } else {
+        $('.message').text('検索結果が見つかりません。').remove();
+      }
+
+      data.Items.forEach(function(i, val) {
+        //console.log(i, val);
+        // var dataTitle = data.Items[i].Item.title;
+        // var dataAuthor = data.Items[i].Item.author;
+        // var dataPublisherName = data.Items[i].Item.publisherName;
+        // var dataImg = data.Items[i].Item.largeImageUrl;
+        // var dataItemurl = data.Items[i].Item.itemUrl;
+        // var result = "";
+        //console.log(dataAuthor)
+        var template =
+          '<li class="lists__item">' +
+            '<div class="lists__item__inner">' +
+              '<a href="' + i.Item.itemUrl + '" class="lists__item__link" target="_blank">' +
+                '<img src="' + i.Item.largeImageUrl + '" class="lists__item__img" alt="">' +
+                  '<p class="lists__item__detail">作品名：' + i.Item.title + '</p>' +
+                  '<p class="lists__item__detail">作者　：' + i.Item.author + '</p>' +
+                  '<p class="lists__item__detail">出版社：' + i.Item.publisherName + '</p>' +
+              '</a>' +
+            '</div>' +
+          '</li>';
+        $('ul.lists').append(template);
+      });
+    })
+    .fail(function(err) {
+      //console.log(err);
+      if (err) {
+        $('.message').text('接続できないっす。');
+      }
+
+      if (!word) {
+        $('.message').text('文字を入力してくだぱい。');
+      }
+    });
+  });
+});
+  // 楽天ブックスの総合検索APIを使って製作してください。
+  // answerの挙動を良く見てね！
+  //
+  // https://webservice.rakuten.co.jp/api/booksbooksearch/
+  //
+  // $.ajax と $.each を調べてみてください
+  // 以下は今回使う$.ajaxの基本的な形です。
+  //
+  // $.ajaxによってデータが取得できたら、必要なデータ(作品名とか作者名とか)を取得します。
+  // 取得できたらDOM上に<ul class='lists'></ul>を用意しているので、その中に下のテンプレに沿ってデータを入れ込みましょう。
+  // <li class='lists__item'>
+  //  <div class='lists__item__inner'>
+  //    <a href='' class='lists__item__link' target='_blank'>
+  //      <img src='' class='lists__item__img' alt=''>
+  //      <p class='lists__item__detail'>作品名：</p>
+  //      <p class='lists__item__detail'>作者　：</p>
+  //      <p class='lists__item__detail'>出版社：</p>
+  //    </a>
 //  </div>
 // </li>
 //
